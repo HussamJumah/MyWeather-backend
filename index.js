@@ -236,7 +236,8 @@ app.use('/weather', weatherRoute)
 mongoose.connect(mongodbLink, options)
 .then(()=>{
   console.log("Successfully connected to Mongodb");
-  app.server.listen(3001)
+  let port = process.env.PORT || 3001
+  app.server.listen(port)
 })
 
 function requestWeather(zipcode, callback){
