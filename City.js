@@ -9,13 +9,11 @@ let cityModel = mongoose.Schema({
     required : true,
   },
 
-  comments:{
-    type : [mongoose.Schema.Types.ObjectId],
-    ref : "Comment",
-    required : true,
-    default : [];
-  }
+  comments:[{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "Comment"
+  }]
 
-  })
+})
 
 module.exports = mongoose.model("City", cityModel)
