@@ -21,7 +21,7 @@ let userModel = mongoose.Schema({
     unique:true
   },
 
-  defaultLocation:{
+  defaultZipcode:{
     type:String,
     required:true
   },

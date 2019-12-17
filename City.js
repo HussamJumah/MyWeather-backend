@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 let cityModel = mongoose.Schema({
 
-  name:{
+  zipcode:{
     type : String,
     required : true,
   },

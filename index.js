@@ -84,7 +84,7 @@ userRoute.post('/register', (req, res) => {
           username:registerData.username,
           password:registerData.password,
           email:registerData.email,
-          defaultLocation:registerData.defaultLocation
+          defaultZipcode:registerData.defaultZipcode
         })
 
         user.save((err)=>{
@@ -110,10 +110,10 @@ app.use('/user', userRoute)
 //to make route ./weather/
 let weatherRoute = express.Router()
 
-weatherRoute.get('/:cityname', (req, res) => {
-  let cityname = req.params.cityname;
-  let citynameQuery = {
-    name:cityname
+weatherRoute.get('/:zipcode', (req, res) => {
+  let zipcode = req.params.zipcode;
+  let zipcodeQuery = {
+    zipcode:zipcode
   }
   let populate = {
     path: 'comments',
@@ -123,7 +123,7 @@ weatherRoute.get('/:cityname', (req, res) => {
       model:"User"
     }
   }
-  City.findOne(citynameQuery).populate(populate).exec((err,city)=>{
+  City.findOne(zipcodeQuery).populate(populate).exec((err,city)=>{
     if (err){
       throw err
       res.status = 500
@@ -132,7 +132,7 @@ weatherRoute.get('/:cityname', (req, res) => {
     }else{
       if(!city){
         let city = City({
-          name:cityname
+          zipcode:zipcode
         })
         city.save((err)=>{
           if(err){
@@ -155,12 +155,12 @@ weatherRoute.get('/:cityname', (req, res) => {
   })
 })
 
-weatherRoute.post('/:cityname/comment', (req, res) => {
+weatherRoute.post('/:zipcode/comment', (req, res) => {
   let commentData = req.body
-  let cityname = req.params.cityname
+  let zipcode = req.params.zipcode
 
   let commentquery = {
-    name:cityname
+    zipcode:zipcode
   }
 
   City.findOne(commentquery,(err, city)=>{
@@ -186,9 +186,7 @@ weatherRoute.post('/:cityname/comment', (req, res) => {
             res.writeHead(500, {'Content-Type':"application/json"})
             res.end("There is an error on our side :(")
           }else{
-            console.log(city.comments);
             city.comments.push(newcomment._id)
-            console.log(city.comments);
 
             city.save((err)=>{
               if(err){
