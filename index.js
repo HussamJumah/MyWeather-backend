@@ -1,6 +1,15 @@
 const express = require('express');
 const http = require('http');
 const bodyparser = require('body-parser');
+const mongoose = require('mongoose');
+
+//needed variables
+const mongodbLink = "mongodb+srv://test:test@myweather-i4dcw.mongodb.net/test?retryWrites=true&w=majority";
+//needed to connect to mongodb
+let options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}
 
 let app = express()
 app.server = http.createServer(app)
@@ -63,6 +72,9 @@ weatherRoute.post('/:cityname/comment', (req, res) => {
 
 app.use('/weather', weatherRoute)
 
-
-
-app.server.listen(3001)
+//connecting to database
+mongoose.connect(mongodbLink, options)
+.then(()=>{
+  console.log("Successfully connected to Mongodb");
+  app.server.listen(3001)
+})
