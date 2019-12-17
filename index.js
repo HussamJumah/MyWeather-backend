@@ -259,5 +259,6 @@ function requestWeather(zipcode, callback){
 }
 
 function cToF(value) {
-  return (value * 9/5) + 32
+
+  return Math.round((value * 9/5) + 32)
 }
