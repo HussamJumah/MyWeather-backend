@@ -1,0 +1,8 @@
+{
+  "name":"MyWeather",
+  "description":"",
+  "repository":"https://github.com/HussamJumah/MyWeather-backend",
+  "logo":"http://node-js-sample.herokuapp.com/node.svg",
+  "keywords":["node","express","weather", "myweather"],
+  "image":"heroku/nodejs"
+}
