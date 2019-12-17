@@ -2,9 +2,11 @@ const express = require('express');
 const http = require('http');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
+const User = require('./User');
 
 //needed variables
 const mongodbLink = "mongodb+srv://test:test@myweather-i4dcw.mongodb.net/test?retryWrites=true&w=majority";
+
 //needed to connect to mongodb
 let options = {
   useNewUrlParser: true,
@@ -31,14 +33,56 @@ let loginData = req.body;
 
 })
 
+//register route
 userRoute.post('/register', (req, res) => {
-let registerData = req.body;
+  let registerData = req.body;
 
-  // Send back JSON
-  res.status = 200
-  res.writeHead(200, {'Content-Type':"application/json"})
-  res.end(JSON.stringify(registerData))
+  let userNameQuery = {
+    username:registerData.username
+  }
 
+  let emailQuery = {
+    email:registerData.email
+  }
+
+  User.findOne({$or: [userNameQuery, emailQuery]}, (err, user) => {
+    if (err) {
+      throw err
+      res.status = 500
+      res.writeHead(500, {'Content-Type':"application/json"})
+      res.end("There is an error on our side :(")
+
+    } else {
+
+      if(user){
+        res.status = 409
+        res.writeHead(409, {'Content-Type':"application/json"})
+        res.end("This username or email already exist")
+
+      } else {
+
+        let user = User({
+          username:registerData.username,
+          password:registerData.password,
+          email:registerData.email,
+          defaultLocation:registerData.defaultLocation
+        })
+
+        user.save((err)=>{
+          if (err){
+            throw err
+            res.status = 500
+            res.writeHead(500, {'Content-Type':"application/json"})
+            res.end("There is an error on our side :(")
+          }else{
+            res.status = 200
+            res.writeHead(200, {'Content-Type':"application/json"})
+            res.end(JSON.stringify(user))
+          }
+        })
+      }
+    }
+  })
 })
 
 app.use('/user', userRoute)
